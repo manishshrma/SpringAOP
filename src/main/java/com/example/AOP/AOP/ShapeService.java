@@ -1,10 +1,15 @@
 package com.example.AOP.AOP;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ShapeService {
+
+    @Autowired
     private Circle circle;
+
+    @Autowired
     private Traingle traingle;
 
     public Circle getCircle() {
@@ -16,6 +21,7 @@ public class ShapeService {
     }
 
     public Traingle getTraingle() {
+
         return traingle;
     }
 

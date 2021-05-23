@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Traingle {
-    private String name;
+    private String name="trainlge object";
 
     public String getName() {
         return name;
