@@ -1,9 +1,8 @@
 package com.example.AOP.AOP;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -95,5 +94,36 @@ public class LoggingAspect {
     ////////////////////After///////////////////////
 
 //    @After is same as @Before, Note no matter if method(point) get executed succesfully r not,
-    // @After or @before will get run. they don't  care if your method throwing exception or not
+    // @After or @before will get run. they don't  care if your method throwing exception or not,
+    //it may happen target method doesn't return because it don't get executed successfully,
+    //so how to make sure that target successfully run only then our advice method run, well
+    // use @AfterReturning("args(name)), this Advice make sure method return soemthing, only then this get
+    //executed.
+//    @AfterThrowing run only when target method throw exception
+
+    //////////////////Around/////////////////////////
+
+    //compulsory to pass ProceedingJoinPoint as args
+    // in After, we can't modify the return value, but @Around let us do so.
+    @Around("getters()")
+    public Object myAroundAdvice(ProceedingJoinPoint proceedingJoinPoint) {
+        Object returnval=null;
+        try {
+            System.out.println("Before advice");
+          returnval=  proceedingJoinPoint.proceed(); // this line decide whether to run the point or not
+            System.out.println("After returning"+returnval);
+
+        } catch (Throwable e) {
+            System.out.println("After throwing");
+        }
+        System.out.println("finally");
+
+        return returnval;
+    }
+
+    @Pointcut("execution(public String get*())&& within(com.example.AOP..*)")
+    public void getters() {
+    }
+
+
 }
